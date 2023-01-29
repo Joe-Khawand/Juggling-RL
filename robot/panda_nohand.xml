@@ -123,7 +123,7 @@
           <geom material="white" mesh="link2" class="visual"/>
           <geom mesh="link2_c" class="collision"/>
           <body name="link3" pos="0 -0.316 0" quat="1 1 0 0">
-            <joint name="joint3"/>
+            <!--<joint name="joint3"/>-->
             <inertial mass="3.228604" pos="2.7518e-2 3.9252e-2 -6.6502e-2"
                 fullinertia="3.7242e-2 3.6155e-2 1.083e-2 -4.761e-3 -1.1396e-2 -1.2805e-2"/>
             <geom mesh="link3_0" material="white" class="visual"/>
@@ -143,7 +143,7 @@
               <body name="link5" pos="-0.0825 0.384 0" quat="1 -1 0 0">
                 <inertial mass="1.225946" pos="-1.1953e-2 4.1065e-2 -3.8437e-2"
                     fullinertia="3.5549e-2 2.9474e-2 8.627e-3 -2.117e-3 -4.037e-3 2.29e-4"/>
-                <joint name="joint5"/>
+                <!--<joint name="joint5"/>-->
                 <geom mesh="link5_0" material="black" class="visual"/>
                 <geom mesh="link5_1" material="white" class="visual"/>
                 <geom mesh="link5_2" material="white" class="visual"/>
@@ -213,9 +213,7 @@
   </actuator>
 
   <keyframe>
-    <!--<key name="home" qpos="0 0 0 -1.57079 0 1.57079 -0.7853"
-        ctrl="0 0 0 -1.57079 0 1.57079 -0.7853"/>-->
-      <key name="home" qpos="0 0 0 -1.57079 0"
+      <key name="home" qpos="0 0 -1.57079"
         ctrl="0 0 0"/>
   </keyframe>
 </mujoco>

@@ -1,6 +1,11 @@
-# Franka Emika Panda Description (MJCF)
+# Adapted Franka Emika Panda Arm
 
-## Overview
+## Our implementation
+
+We took the Emika Panda robotic arm and changed the model to adapt it to our use case.
+
+
+## Overview of the original arm
 
 This package contains a simplified robot description (MJCF) of the [Franka Emika
 Panda](https://www.franka.de/) developed by [Franka
@@ -12,7 +17,7 @@ description](https://github.com/frankaemika/franka_ros/tree/develop/franka_descr
   <img src="panda.png" width="400">
 </p>
 
-## URDF → MJCF derivation steps
+### URDF → MJCF derivation steps
 
 1. Converted the DAE [mesh
    files](https://github.com/frankaemika/franka_ros/tree/develop/franka_description/meshes/visual)
@@ -38,6 +43,6 @@ description](https://github.com/frankaemika/franka_ros/tree/develop/franka_descr
     position actuator acting on this tendon.
 15. Added `scene.xml` which includes the robot, with a textured groundplane, skybox, and haze.
 
-## License
+### License
 
 This model is released under an [Apache-2.0 License](LICENSE).

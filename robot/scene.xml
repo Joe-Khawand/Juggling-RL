@@ -1,6 +1,6 @@
-<mujoco model="panda scene">
+<mujoco model="scene">
 
-  <include file="panda_nohand.xml"/>
+  <include file="juggler.xml"/>
 
   <statistic center="0.3 0 0.4" extent="1"/>
 

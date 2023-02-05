@@ -19,7 +19,6 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
     }
     
     def __init__(self,render_mode=None):
-        print("Initialising env")
         utils.EzPickle.__init__(self)
         FILE_PATH = os.getcwd() + '/robot/scene.xml'
         

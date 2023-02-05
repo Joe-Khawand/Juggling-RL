@@ -3,45 +3,61 @@ import mujoco
 import numpy as np
 import os
 
-from gymnasium.envs.mujoco import MuJocoPyEnv
+from gymnasium.envs.mujoco import MujocoEnv
 from gymnasium import utils
 from gymnasium import spaces
 
 
-class JugglingEnv(MuJocoPyEnv,utils.EzPickle):
+class Juggling_Env(MujocoEnv,utils.EzPickle):
+    metadata = {
+        "render_modes": [
+            "human",
+            "rgb_array",
+            "depth_array",
+        ],
+        "render_fps": 100,
+    }
     
-    def __init__(self):
-        
+    def __init__(self,render_mode=None):
+        print("Initialising env")
         utils.EzPickle.__init__(self)
         FILE_PATH = os.getcwd() + '/robot/scene.xml'
-
-        mujoco_env.MujocoEnv.__init__(self, FILE_PATH, 5)
-        # Observations
         
         #agent observation space is the position of the cup
-        #target observation will be the concatenated positions of the two balls
+        #target observation will be the concatenated positions of the ball
         
         self.observation_space = spaces.Dict(
             {
-                "agent": spaces.Box(low=, high=, shape=(3,), dtype=np.float32),
-                "target": spaces.Box(0, size - 1, shape=(6,), dtype=np.float32)
+                "agent": spaces.Box(low=0, high=2, shape=(3,), dtype=np.float64),
+                "target": spaces.Box(low=0, high=2, shape=(3,), dtype=np.float64)
             })
         
         # action space is the control values of our actuators
-        self.action_space = spaces.Box(low=np.array([-2.9,-1.76,-3.07]), high=np.array([2.9,1.76,3.07]), shape=(3,), dtype=np.float32)
+        self.action_space = spaces.Box(low=np.array([-2.9,-1.76,-3.07]), high=np.array([2.9,1.76,3.07]), shape=(3,), dtype=np.float64)
+
+        assert render_mode is None or render_mode in self.metadata["render_modes"]
+        self.render_mode = render_mode
+
+        MujocoEnv.__init__(self, FILE_PATH,5,observation_space=self.observation_space)
+
+        self.renderer=mujoco.Renderer(self.model)
+        self.data=mujoco.MjData(self.model)
         
     def step(self,a):
-        return
+        self.data.ctrl=a
+        mujoco.mj_step(self.model, self.data)
+
     
     def reset(self):
-        return
+        mujoco.mj_resetData(self.model, self.data)
 
+    def _render_frame(self):
+        self.renderer.update_scene(self.data)
+        return self.renderer.render().copy()
+    
+    #TODO
     def render(self):
         return
 
     def _get_obs(self):
-        return {"agent": self._agent_location, "target": self._target_location}
-    
-    #TODO write reset() step() close() render() _render_frame()
-    # https://gymnasium.farama.org/tutorials/gymnasium_basics/environment_creation/#sphx-glr-tutorials-gymnasium-basics-environment-creation-py
-    
+        return {"agent": self.get_body_com("Cone"), "target": self.get_body_com("Ball1")}

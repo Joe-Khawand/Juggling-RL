@@ -5,9 +5,11 @@
         <freejoint/>
         <geom name="ball1" type="sphere" size=".02" solref="-1000 0" rgba="1 0 0 1"/>
         </body>
+        <!--
         <body name="Ball2" pos="0.5 -0.5 1">
         <freejoint/>
         <geom name="ball2" type="sphere" size=".02" solref="-1000 0" rgba="0 1 0 1"/>
         </body>
+        -->
     </worldbody>
 </mujoco>

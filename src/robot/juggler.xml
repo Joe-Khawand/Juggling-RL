@@ -64,6 +64,8 @@
     <mesh file="link5_0.obj"/>
     <mesh file="link5_1.obj"/>
     <mesh file="link5_2.obj"/>
+
+    <mesh name="cone" file="cone.obj"/>
   </asset>
 
   <worldbody>
@@ -121,7 +123,9 @@
                 <geom mesh="link5_c0" class="collision"/>
                 <geom mesh="link5_c1" class="collision"/>
                 <geom mesh="link5_c2" class="collision"/>
-        
+                <body name="Cone" pos="0 0 0">
+                  <geom type= "mesh" mesh="cone" material="black"/>
+                </body>
               </body>
             </body>
           </body>

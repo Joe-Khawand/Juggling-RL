@@ -2,6 +2,7 @@ import gymnasium as gym
 import mujoco
 import numpy as np
 import os
+import mediapy as media
 
 from gymnasium.envs.mujoco import MujocoEnv
 from gymnasium import utils
@@ -40,15 +41,24 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         self._initialize_simulation()
         
         
-    def step(self,ctrl,n_frames):
-        self._step_mujoco_simulation(ctrl, n_frames)
-
+    def step(self,ctrl):
+        #steo function has to return observation, reward, terminated, truncated, info
+        self._step_mujoco_simulation(ctrl, 300)
+        #TODO implement reward, termination, and truncation
+        reward=1
+        terminated=0
+        truncated=0
+        info={}
+        return self._get_obs(), reward, terminated, truncated, info
     
     def reset(self):
         self._reset_simulation()
     
     def render(self):
-        return super().render()
+        renderer = mujoco.Renderer(self.model)
+        mujoco.mj_forward(self.model, self.data)
+        renderer.update_scene(self.data)
+        media.show_image(renderer.render())
 
     def _get_obs(self):
         return {"agent": self.get_body_com("Cone"), "target": self.get_body_com("Ball1")}

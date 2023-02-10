@@ -18,7 +18,7 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         "render_fps": 100,
     }
     
-    def __init__(self,render_mode=None):
+    def __init__(self,render_mode="human"):
         utils.EzPickle.__init__(self)
         FILE_PATH = os.getcwd() + '/robot/scene.xml'
         
@@ -34,29 +34,21 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         # action space is the control values of our actuators
         self.action_space = spaces.Box(low=np.array([-2.9,-1.76,-3.07]), high=np.array([2.9,1.76,3.07]), shape=(3,), dtype=np.float64)
 
+        MujocoEnv.__init__(self, FILE_PATH,5,observation_space=self.observation_space)
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
-
-        MujocoEnv.__init__(self, FILE_PATH,5,observation_space=self.observation_space)
-
-        self.renderer=mujoco.Renderer(self.model)
-        self.data=mujoco.MjData(self.model)
+        self._initialize_simulation()
         
-    def step(self,a):
-        self.data.ctrl=a
-        mujoco.mj_step(self.model, self.data)
+        
+    def step(self,ctrl,n_frames):
+        self._step_mujoco_simulation(ctrl, n_frames)
 
     
     def reset(self):
-        mujoco.mj_resetData(self.model, self.data)
-
-    def _render_frame(self):
-        self.renderer.update_scene(self.data)
-        return self.renderer.render().copy()
+        self._reset_simulation()
     
-    #TODO
     def render(self):
-        return
+        return super().render()
 
     def _get_obs(self):
         return {"agent": self.get_body_com("Cone"), "target": self.get_body_com("Ball1")}

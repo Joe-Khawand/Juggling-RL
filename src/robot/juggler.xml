@@ -124,7 +124,8 @@
                 <geom mesh="link5_c1" class="collision"/>
                 <geom mesh="link5_c2" class="collision"/>
                 <body name="Cone" pos="0 0 0">
-                  <geom type= "mesh" mesh="cone" material="black"/>
+                  <geom type= "mesh" mesh="cone" material="black" class="visual"/>
+                  <geom type= "mesh" mesh="cone" class="collision"/>
                 </body>
               </body>
             </body>

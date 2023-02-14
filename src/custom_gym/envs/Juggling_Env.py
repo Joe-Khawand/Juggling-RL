@@ -46,19 +46,22 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         self._step_mujoco_simulation(ctrl, 300)
         #TODO implement reward, termination, and truncation
         reward=1
-        terminated=0
-        truncated=0
+        terminated=False
+        truncated=False
         info={}
         return self._get_obs(), reward, terminated, truncated, info
     
-    def reset(self):
+    def reset(self,seed=None,options=""):
         self._reset_simulation()
+        return self._get_obs(),{}
     
     def render(self):
         renderer = mujoco.Renderer(self.model)
         mujoco.mj_forward(self.model, self.data)
         renderer.update_scene(self.data)
-        media.show_image(renderer.render())
+        image=renderer.render()
+        media.show_image(image)
+        return image
 
     def _get_obs(self):
         return {"agent": self.get_body_com("Cone"), "target": self.get_body_com("Ball1")}

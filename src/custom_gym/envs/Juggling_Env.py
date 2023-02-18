@@ -26,11 +26,12 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         #agent observation space is the position of the cup
         #target observation will be the concatenated positions of the ball
         
-        self.observation_space = spaces.Dict(
-            {
-                "agent": spaces.Box(low=-2, high=10, shape=(3,), dtype=np.float64),
-                "target": spaces.Box(low=-2, high=10, shape=(3,), dtype=np.float64)
-            })
+        self.observation_space = spaces.Box(low=-10.0, high=10.0,shape=(6,), dtype=np.float64)
+        #spaces.Dict(
+        #    {
+        #        "agent": spaces.Box(low=-2, high=10, shape=(1,3), dtype=np.float64),
+        #        "target": spaces.Box(low=-2, high=10, shape=(1,3), dtype=np.float64)
+        #    })
         
         # action space is the control values of our actuators
         self.action_space = spaces.Box(low=np.array([-2.9,-1.76,-3.07]), high=np.array([2.9,1.76,3.07]), shape=(3,), dtype=np.float64)
@@ -50,14 +51,14 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         self._step_mujoco_simulation(ctrl, 300)
         after=self._get_obs()
 
-        if(after["target"][2]>=2 and before["target"][2]<2):
+        if(after[-1]>=2 and before[-1]<2):
             reward=1
             self.number_of_juggles+=1
         else:
             reward=0
         
         terminated=self.number_of_juggles==self.goal
-        truncated=after["target"][2]<=0
+        truncated=after[-1]<=0
         info={"obs":self._get_obs(), "reward":reward, "termination":terminated, "truncation":truncated}
         return self._get_obs(), reward, terminated, truncated, info
     
@@ -75,4 +76,4 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
 
     def _get_obs(self):
         
-        return {"agent": self.get_body_com("Cone"), "target": self.get_body_com("Ball1")}
+        return np.array(self.get_body_com("Cone")+self.get_body_com("Ball1"),dtype=np.float64)

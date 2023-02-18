@@ -28,8 +28,8 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         
         self.observation_space = spaces.Dict(
             {
-                "agent": spaces.Box(low=0, high=2, shape=(3,), dtype=np.float64),
-                "target": spaces.Box(low=0, high=2, shape=(3,), dtype=np.float64)
+                "agent": spaces.Box(low=-2, high=10, shape=(3,), dtype=np.float64),
+                "target": spaces.Box(low=-2, high=10, shape=(3,), dtype=np.float64)
             })
         
         # action space is the control values of our actuators
@@ -39,16 +39,26 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
         self._initialize_simulation()
+        self.number_of_juggles=0
+        self.goal=50
         
         
     def step(self,ctrl):
-        #steo function has to return observation, reward, terminated, truncated, info
+        #step function has to return observation, reward, terminated, truncated, info
+        before=self._get_obs()
+        print(before)
         self._step_mujoco_simulation(ctrl, 300)
-        #TODO implement reward, termination, and truncation
-        reward=1
-        terminated=False
-        truncated=False
-        info={}
+        after=self._get_obs()
+
+        if(after["target"][2]>=2 and before["target"][2]<2):
+            reward=1
+            self.number_of_juggles+=1
+        else:
+            reward=0
+        
+        terminated=self.number_of_juggles==self.goal
+        truncated=after["target"][2]<=0
+        info={"obs":self._get_obs(), "reward":reward, "termination":terminated, "truncation":truncated}
         return self._get_obs(), reward, terminated, truncated, info
     
     def reset(self,seed=None,options=""):
@@ -64,4 +74,5 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         return image
 
     def _get_obs(self):
+        
         return {"agent": self.get_body_com("Cone"), "target": self.get_body_com("Ball1")}

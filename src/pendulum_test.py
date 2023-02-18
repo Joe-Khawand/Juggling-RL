@@ -1,9 +1,9 @@
 import numpy as np
 import gymnasium as gym
 
-from keras.models import Sequential, Model
-from keras.layers import Dense, Activation, Flatten, Input, Concatenate
-from keras.optimizers import Adam
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Dense, Activation, Flatten, Input, Concatenate
+from tensorflow.keras.optimizers import Adam
 
 from rl.agents import DDPGAgent
 from rl.memory import SequentialMemory
@@ -48,14 +48,14 @@ x = Activation('linear')(x)
 critic = Model(inputs=[action_input, observation_input], outputs=x)
 print(critic.summary())
 
-# Finally, we configure and compile our agent. You can use every built-in Keras optimizer and
+# Finally, we configure and compile our agent. You can use every built-in tensorflow.keras optimizer and
 # even the metrics!
 memory = SequentialMemory(limit=100000, window_length=1)
 random_process = OrnsteinUhlenbeckProcess(size=nb_actions, theta=.15, mu=0., sigma=.3)
 agent = DDPGAgent(nb_actions=nb_actions, actor=actor, critic=critic, critic_action_input=action_input,
                   memory=memory, nb_steps_warmup_critic=100, nb_steps_warmup_actor=100,
                   random_process=random_process, gamma=.99, target_model_update=1e-3)
-agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
+agent.compile(Adam(learning_rate=.001, clipnorm=1.), metrics=['mae'])
 
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
@@ -63,7 +63,7 @@ agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
 agent.fit(env, nb_steps=50000, visualize=True, verbose=1, nb_max_episode_steps=200)
 
 # After training is done, we save the final weights.
-agent.save_weights('ddpg_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
+agent.save_weights(f'ddpg_{ENV_NAME}_weights.h5f', overwrite=True)
 
 # Finally, evaluate our algorithm for 5 episodes.
 agent.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=200)

@@ -76,4 +76,4 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
 
     def _get_obs(self):
         
-        return np.array(self.get_body_com("Cone")+self.get_body_com("Ball1"),dtype=np.float64)
+        return np.array(self.get_body_com("Bande_polyedre")+self.get_body_com("Ball1"),dtype=np.float64)

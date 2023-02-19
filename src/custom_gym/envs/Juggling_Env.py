@@ -60,7 +60,7 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         terminated=self.number_of_juggles==self.goal
         truncated=after[-1]<=0
         info={"obs":self._get_obs(), "reward":reward, "termination":terminated, "truncation":truncated}
-        return self._get_obs(), reward, terminated, truncated, info
+        return self._get_obs(), reward, terminated,truncated, info
     
     def reset(self,seed=None,options=""):
         self._reset_simulation()
@@ -75,5 +75,4 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         return image
 
     def _get_obs(self):
-        
-        return np.array(self.get_body_com("Bande_polyedre")+self.get_body_com("Ball1"),dtype=np.float64)
+        return np.concatenate((self.get_body_com("Bande_polyedre"),self.get_body_com("Ball1")))

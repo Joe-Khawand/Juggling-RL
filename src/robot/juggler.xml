@@ -1,7 +1,7 @@
 <mujoco model="juggler">
   <compiler angle="radian" meshdir="assets" autolimits="true"/>
 
-  <option integrator="implicit"/>
+  <option integrator="implicit" gravity="0 0 -2"/>
 
   <default>
     <default class="panda">

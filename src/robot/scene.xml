@@ -1,5 +1,7 @@
 <mujoco model="scene">
 
+  <option gravity="0 0 -2"/>
+
   <include file="juggler.xml"/>
   <include file="ball.xml"/>
 

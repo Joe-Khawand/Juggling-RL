@@ -6,7 +6,7 @@
     <worldbody>
         <body name="Ball1" pos="0.33 0 1.5">
         <freejoint/>
-        <geom name="ball1" type="sphere" size=".02" rgba="1 0 0 1" mass=".001"/>
+        <geom name="ball1" type="sphere" size=".02" rgba="1 0 0 1" mass="1"/>
         </body>
         <!--
         <body name="Ball2" pos="0.5 -0.5 1">

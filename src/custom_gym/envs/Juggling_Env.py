@@ -47,18 +47,17 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
     def step(self,ctrl):
         #step function has to return observation, reward, terminated, truncated, info
         before=self._get_obs()
-        print(before)
         self._step_mujoco_simulation(ctrl, 300)
         after=self._get_obs()
 
-        if(after[-1]>=2 and before[-1]<2):
+        if(after[-1]>=1 and before[-1]<1):
             reward=1
             self.number_of_juggles+=1
         else:
             reward=0
         
         terminated=self.number_of_juggles==self.goal
-        truncated=after[-1]<=0
+        truncated=after[-1]<=0.1
         info={"obs":self._get_obs(), "reward":reward, "termination":terminated, "truncation":truncated}
         return self._get_obs(), reward, terminated,truncated, info
     
@@ -71,7 +70,7 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         mujoco.mj_forward(self.model, self.data)
         renderer.update_scene(self.data)
         image=renderer.render()
-        media.show_image(image)
+        #media.show_image(image)
         return image
 
     def _get_obs(self):

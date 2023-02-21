@@ -41,7 +41,7 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         self.render_mode = render_mode
         self._initialize_simulation()
         self.number_of_juggles=0
-        self.goal=50
+        self.goal=60#seconds
         
         
     def step(self,ctrl):
@@ -56,7 +56,7 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         else:
             reward=0
         
-        terminated=self.number_of_juggles==self.goal
+        terminated=self.data.time>60
         truncated=after[-1]<=0.1
         info={"obs":self._get_obs(), "reward":reward, "termination":terminated, "truncation":truncated}
         return self._get_obs(), reward, terminated,truncated, info

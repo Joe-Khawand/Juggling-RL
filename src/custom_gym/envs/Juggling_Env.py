@@ -50,11 +50,12 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         self._step_mujoco_simulation(ctrl, 300)
         after=self._get_obs()
 
-        if(after[-1]>=1 and before[-1]<1):
-            reward=1
-            self.number_of_juggles+=1
-        else:
-            reward=0
+        #if(after[-1]>=1 and before[-1]<1):
+        #    reward=1
+        #    self.number_of_juggles+=1
+        #else:
+        #    reward=0
+        reward=np.mean(1/(abs(self.get_body_com("Bande_polyedre")-self.get_body_com("Ball1"))))/100000
         
         terminated=self.data.time>60
         truncated=after[-1]<=0.1

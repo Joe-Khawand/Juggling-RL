@@ -34,7 +34,9 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         #    })
         
         # action space is the control values of our actuators
-        self.action_space = spaces.Box(low=np.array([-2.9,-1.76,-3.07]), high=np.array([2.9,1.76,3.07]), shape=(3,), dtype=np.float64)
+        #self.action_space = spaces.Box(low=np.array([-2.9,-1.76,-3.07]), high=np.array([2.9,1.76,3.07]), shape=(3,), dtype=np.float64)
+        #action space 2.0
+        self.action_space = spaces.Box(low=np.array([-1.,-1.,-1.]), high=np.array([1.,1.,1.]), shape=(3,), dtype=np.float64)
 
         MujocoEnv.__init__(self, FILE_PATH,5,observation_space=self.observation_space)
         assert render_mode is None or render_mode in self.metadata["render_modes"]
@@ -47,16 +49,16 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
     def step(self,ctrl):
         #step function has to return observation, reward, terminated, truncated, info
         before=self._get_obs()
-        self._step_mujoco_simulation(ctrl, 300)
+        self._step_mujoco_simulation(ctrl, 1)
         after=self._get_obs()
 
-        #if(after[-1]>=1 and before[-1]<1):
-        #    reward=1
-        #    self.number_of_juggles+=1
-        #else:
-        #    reward=0
-        reward=np.mean(1/(abs(self.get_body_com("Bande_polyedre")-self.get_body_com("Ball1"))))/100000
-        
+        if(after[-1]>=1 and before[-1]<1):
+            reward=1
+            self.number_of_juggles+=1
+        else:
+            reward=0
+        #reward=np.mean(1/(abs(self.get_body_com("Bande_polyedre")-self.get_body_com("Ball1"))))/100000
+        #reward=self.data.ncon
         terminated=self.data.time>60
         truncated=after[-1]<=0.1
         info={"obs":self._get_obs(), "reward":reward, "termination":terminated, "truncation":truncated}

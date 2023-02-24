@@ -2,8 +2,9 @@
 
 ## Our implementation
 
-We took the Emika Panda robotic arm and changed the model to adapt it to our use case.
+We took the Emika Panda robotic arm form [the mujoco github repo](https://github.com/deepmind/mujoco_menagerie/tree/main/franka_emika_panda) and changed the model to adapt it to our use case adding a cone to catch the ball and blocking certain actuators.
 
+![scene preview](../../docs/full_view_scene.PNG)
 
 ## Overview of the original arm
 

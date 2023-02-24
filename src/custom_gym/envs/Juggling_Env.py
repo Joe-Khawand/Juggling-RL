@@ -24,14 +24,9 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         FILE_PATH = os.getcwd() + '/robot/scene.xml'
         
         #agent observation space is the position of the cup
-        #target observation will be the concatenated positions of the ball
+        #target observation is the concatenated positions of the cone and the ball
         
         self.observation_space = spaces.Box(low=-10.0, high=10.0,shape=(6,), dtype=np.float64)
-        #spaces.Dict(
-        #    {
-        #        "agent": spaces.Box(low=-2, high=10, shape=(1,3), dtype=np.float64),
-        #        "target": spaces.Box(low=-2, high=10, shape=(1,3), dtype=np.float64)
-        #    })
         
         # action space is the control values of our actuators
         #self.action_space = spaces.Box(low=np.array([-2.9,-1.76,-3.07]), high=np.array([2.9,1.76,3.07]), shape=(3,), dtype=np.float64)
@@ -47,18 +42,24 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         
         
     def step(self,ctrl):
-        #step function has to return observation, reward, terminated, truncated, info
+        
         before=self._get_obs()
         self._step_mujoco_simulation(ctrl, 1)
         after=self._get_obs()
 
+        #Reward 1 : juggling
         if(after[-1]>=1 and before[-1]<1):
             reward=1
             self.number_of_juggles+=1
         else:
             reward=0
+
+        #Reward 2 : minimising distance
         #reward=np.mean(1/(abs(self.get_body_com("Bande_polyedre")-self.get_body_com("Ball1"))))/100000
+
+        #Reward 3 : catching by maximising collisions
         #reward=self.data.ncon
+
         terminated=self.data.time>60
         truncated=after[-1]<=0.1
         info={"obs":self._get_obs(), "reward":reward, "termination":terminated, "truncation":truncated}
@@ -73,7 +74,6 @@ class Juggling_Env(MujocoEnv,utils.EzPickle):
         mujoco.mj_forward(self.model, self.data)
         renderer.update_scene(self.data)
         image=renderer.render()
-        #media.show_image(image)
         return image
 
     def _get_obs(self):

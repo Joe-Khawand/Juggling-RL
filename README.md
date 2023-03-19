@@ -24,7 +24,7 @@ Then clone the repository on your machine.
 
 You will find two jupyter notebooks inside the __src__ directory:
 - RL_DPS is our implementation using the Direct Policy Search Method
-- RL_DDPG is our implementation using deep deterministic policy gradient
+- RL is our implementation using deep deterministic policy gradient
 
 Simply run all the cells to see results.
 

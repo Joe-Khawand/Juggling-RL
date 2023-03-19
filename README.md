@@ -29,6 +29,6 @@ You will find two jupyter notebooks inside the __src__ directory:
 Simply run all the cells to see results.
 
 ## Paper
-For more information about the implementation please refer to our paper.
+For more information about the implementation please refer to our paper in the __docs__ folder.
 
 
